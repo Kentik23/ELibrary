@@ -22,11 +22,11 @@
 		Автор: <span th:text="${book.getAuthor()}"/>
 		<br>
 		Год печати: <span th:text="${book.getYear()}"/>
-		<div th:if="${book.getPerson_id() != 0}">
+		<div th:if="${personName}">
 			<span>Книга у: </span><span th:text="${personName}"/>
 			<a th:href="@{/books/{id}/free(id = ${book.getId()})}">Освободить книгу</a>
 		</div>
-		<form th:if="${book.getPerson_id() == 0}" th:method="get" th:action="@{/books/{id}/setPerson(id = ${book.getId()})}">
+		<form th:if="${people}" th:method="get" th:action="@{/books/{id}/setPerson(id = ${book.getId()})}">
 			<span>Эта книга свободна</span>
 			<select name="id">
 				<option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">Имя</option>

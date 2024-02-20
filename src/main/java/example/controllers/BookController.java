@@ -35,9 +35,10 @@ public class BookController {
     public String info(@PathVariable("id") int id, Model model) {
         Book book = bookDAO.get(id).get();
         model.addAttribute("book", book);
-        if (book.getPerson_id() != 0) {
-            Person person = personDAO.get(book.getPerson_id()).get();
-            model.addAttribute("personName", person.getName());
+
+        Optional<Person> owner = bookDAO.getOwner(id);
+        if (owner.isPresent()) {
+            model.addAttribute("personName", owner.get().getName());
         } else
             model.addAttribute("people", personDAO.index());
 
@@ -68,9 +69,7 @@ public class BookController {
 
     @GetMapping("{id}/free")
     public String free(@PathVariable("id") int id) {
-        Book book = bookDAO.get(id).get();
-        book.setPerson_id(0);
-        bookDAO.update(id, book);
+        bookDAO.setPersonId(id, -1);
         return "redirect:/books/{id}";
     }
 

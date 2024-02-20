@@ -16,16 +16,14 @@ public class Book {
     @Min(value = 0, message = "У нас не музей")
     @Max(value = 2024, message = "Ванга?")
     private int year;
-    private int person_id;
 
     public Book() {
     }
 
-    public Book(String name, String author, int year, int person_id) {
+    public Book(String name, String author, int year) {
         this.name = name;
         this.author = author;
         this.year = year;
-        this.person_id = person_id;
     }
 
     public int getId() {
@@ -60,14 +58,6 @@ public class Book {
         this.year = year;
     }
 
-    public int getPerson_id() {
-        return person_id;
-    }
-
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
-    }
-
     @Override
     public String toString() {
         return "Book{" +
@@ -75,7 +65,6 @@ public class Book {
                 ", name='" + name + '\'' +
                 ", author='" + author + '\'' +
                 ", year=" + year +
-                ", person_id=" + person_id +
                 '}';
     }
 }

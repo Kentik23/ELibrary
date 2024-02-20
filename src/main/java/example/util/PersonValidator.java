@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Optional;
+
 @Component
 public class PersonValidator implements Validator {
     private final PersonDAO personDAO;
@@ -26,7 +28,8 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if (personDAO.findByName(person.getName()).isPresent()) {
+        Optional<Person> equalsNamePerson = personDAO.findByName(person.getName());
+        if (equalsNamePerson.isPresent() && equalsNamePerson.get().getId() != person.getId()) {
             errors.rejectValue("name", "", "Это имя уже занято");
         }
     }

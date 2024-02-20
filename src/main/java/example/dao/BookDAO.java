@@ -1,6 +1,7 @@
 package example.dao;
 
 import example.models.Book;
+import example.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,15 +32,21 @@ public class BookDAO {
     }
 
     public int setPersonId(int bookId, int personId) {
-        return jdbcTemplate.update("update book set person_id = ? where id = ?", personId, bookId);
+        return jdbcTemplate.update("update book set person_id = ? where id = ?", personId == -1 ? null : personId, bookId);
+    }
+
+    public Optional<Person> getOwner(int id) {
+        return jdbcTemplate.query("SELECT person.* FROM book JOIN person ON book.person_id = person.id " +
+                        "WHERE book.id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny();
     }
 
     public int update(int id, Book book) {
-        return jdbcTemplate.update("update book set name = ?, author = ?, year = ?, person_id = ? where id = ?", book.getName(), book.getAuthor(), book.getYear(), book.getPerson_id(), id);
+        return jdbcTemplate.update("update book set name = ?, author = ?, year = ? where id = ?", book.getName(), book.getAuthor(), book.getYear(), id);
     }
 
     public int save(Book book) {
-        return jdbcTemplate.update("insert into book(name, author, year, person_id) values(?, ?, ?, ?)", book.getName(), book.getAuthor(), book.getYear(), book.getPerson_id());
+        return jdbcTemplate.update("insert into book(name, author, year) values(?, ?, ?)", book.getName(), book.getAuthor(), book.getYear());
     }
 
     public int delete(int id) {
