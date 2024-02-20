@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Читатели</title>
+</head>
+<body>
+	<header>
+		<h1>
+			<a href="index.html">Библиотека</a>
+		</h1>
+		<nav>
+			<ul>
+				<li><a href="/people">Читатели</a></li><!--
+				--><li><a href="/books">Книги</a></li>
+			</ul>
+		</nav>
+	</header>
+	<hr>
+	<section>
+		<table>
+			<caption>Список читателей</caption>
+			<thead>
+			<tr>
+				<th scope="col" colspan="2">ФИО</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="person : ${people}">
+				<td><span th:text="${person.getName()}"/></td>
+				<td><a th:href="@{/people/{id}(id = ${person.getId()})}">------></a></td>
+			</tr>
+			</tbody>
+		</table>
+	</section>
+	<hr>
+    <a href="/people/new">Добавить читателя</a>
+</body>
+</html>
