@@ -5,7 +5,7 @@ import example.dao.PersonDAO;
 import example.models.Book;
 import example.models.Person;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import example.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
