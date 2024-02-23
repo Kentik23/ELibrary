@@ -1,21 +1,34 @@
 package example.models;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "book")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Size(min = 2, max = 50, message = "Размер имени должен быть между 2 и 50 символами")
+    @Column(name = "name")
     private String name;
 
     @Size(min = 2, max = 50, message = "Размер имени должен быть между 2 и 50 символами")
+    @Column(name = "author")
     private String author;
 
     @Min(value = 0, message = "У нас не музей")
     @Max(value = 2024, message = "Ванга?")
+    @Column(name = "year")
     private int year;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person person;
 
     public Book() {
     }
@@ -56,6 +69,14 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Override
