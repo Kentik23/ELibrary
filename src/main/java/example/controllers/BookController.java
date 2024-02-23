@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/books")
 public class BookController {
@@ -25,8 +27,12 @@ public class BookController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                        @RequestParam(value = "books_per_page", defaultValue = "0") int booksPerPage,
+                        @RequestParam(value = "sort_by_year", defaultValue = "false") boolean sortByYear) {
+        List<Book> books = bookService.findAll(page, booksPerPage, sortByYear);
+
+        model.addAttribute("books", books);
         return "books/index";
     }
 

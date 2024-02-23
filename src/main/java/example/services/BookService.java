@@ -6,6 +6,8 @@ import example.repositories.BookRepository;
 import example.repositories.PeopleRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +25,17 @@ public class BookService {
         this.peopleRepository = peopleRepository;
     }
 
-    public List<Book> findAll() {
+    public List<Book> findAll(int page, int booksPerPage, boolean sortByYear) {
+        if (page != 0 && booksPerPage != 0 && sortByYear) {
+            return bookRepository.findAll(PageRequest.of(page - 1, booksPerPage, Sort.by("year"))).getContent();
+        }
+        if (page != 0 && booksPerPage != 0) {
+            return bookRepository.findAll(PageRequest.of(page - 1, booksPerPage)).getContent();
+        }
+        if (sortByYear) {
+            return bookRepository.findAll(Sort.by("year"));
+        }
+
         return bookRepository.findAll();
     }
 
