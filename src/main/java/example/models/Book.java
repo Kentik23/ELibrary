@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
@@ -25,6 +29,11 @@ public class Book {
     @Max(value = 2024, message = "Ванга?")
     @Column(name = "year")
     private int year;
+
+    @Column(name = "date_of_capture")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateOfCapture;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -77,6 +86,26 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getFullName() {
+        return getName() + ", " + getAuthor() + ", " + getYear();
+    }
+
+    public boolean isOverdue() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -5);
+        Date tenDaysAgo = calendar.getTime();
+
+        return dateOfCapture.before(tenDaysAgo);
+    }
+
+    public Date getDateOfCapture() {
+        return dateOfCapture;
+    }
+
+    public void setDateOfCapture(Date dateOfCapture) {
+        this.dateOfCapture = dateOfCapture;
     }
 
     @Override

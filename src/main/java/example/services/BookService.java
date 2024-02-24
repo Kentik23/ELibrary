@@ -11,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,9 +47,18 @@ public class BookService {
 
     public Book findByIdFetchEager(int id) {
         Book book = bookRepository.findById(id).get();
-        Hibernate.initialize(book.getPerson());
+        if (book != null)
+            Hibernate.initialize(book.getPerson());
 
         return book;
+    }
+
+    public Optional<Book> findByNameLike(String text) {
+        Optional<Book> bookOptional = bookRepository.getBookByNameStartingWith(text).stream().findAny();
+        if (bookOptional.isPresent())
+            Hibernate.initialize(bookOptional.get().getPerson());
+
+        return bookOptional;
     }
 
     @Transactional
@@ -82,5 +93,6 @@ public class BookService {
         Person person = peopleRepository.findById(personId).get();
 
         book.setPerson(person);
+        book.setDateOfCapture(new Date());
     }
 }

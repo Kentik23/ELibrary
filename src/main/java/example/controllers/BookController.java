@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -97,5 +98,18 @@ public class BookController {
     public String setPerson(@PathVariable("id") int bookId, @RequestParam("id") int personId) {
         bookService.setPersonId(bookId, personId);
         return "redirect:/books/{id}";
+    }
+
+    @GetMapping("search")
+    public String search(@RequestParam(value = "text", required = false) String text, Model model) {
+        if (text != null) {
+            Optional<Book> bookOptional = bookService.findByNameLike(text);
+
+            if (bookOptional.isPresent())
+                model.addAttribute("book", bookOptional.get());
+            else
+                model.addAttribute("booksNotFound", true);
+        }
+        return "/books/search";
     }
 }

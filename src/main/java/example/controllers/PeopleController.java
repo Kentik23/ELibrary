@@ -20,9 +20,7 @@ import java.util.List;
 @RequestMapping("people")
 public class PeopleController {
     private PeopleService peopleService;
-
     private final PersonValidator personValidator;
-
     @Autowired
     public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
         this.peopleService = peopleService;
