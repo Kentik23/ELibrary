@@ -23,14 +23,16 @@
 		<hr>
 		<div>
 			Список книг:
-			<p th:each="book : ${books}" th:text="${book.getName()}"/>
+			<p th:each="book : ${books}" th:style="${book.isOverdue()} ? 'color: red'" th:text="${book.getName()}"/>
 			<span th:if="${books.isEmpty()}">Человек пока не взял ни одной книги.</span>
 		</div>
-		<hr>
+	</section>
+	<hr>
+	<aside>
 		<a th:href="@{/people/{id}/edit(id = ${person.getId()})}">Редактировать</a>
 		<form th:method="DELETE" th:action="@{/people/{id}(id = ${person.getId()})}">
 			<input type="submit" value="Удалить">
 		</form>
-	</section>
+	</aside>
 </body>
 </html>

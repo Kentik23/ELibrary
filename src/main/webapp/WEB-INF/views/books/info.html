@@ -16,6 +16,7 @@
 			</ul>
 		</nav>
 	</header>
+	<hr>
 	<section>
 		Название: <span th:text="${book.getName()}"/>
 		<br>
@@ -33,11 +34,13 @@
 			</select>
 			<input type="submit" value="Назначить книгу"/>
 		</form>
-		<br>
+	</section>
+	<hr>
+	<aside>
 		<a th:href="@{/books/{id}/edit(id = ${book.getId()})}">Редактировать</a>
 		<form th:method="DELETE" th:action="@{/books/{id}(id = ${book.getId()})}">
 			<input type="submit" value="Удалить">
 		</form>
-	</section>
+	</aside>
 </body>
 </html>
